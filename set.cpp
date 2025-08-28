@@ -5,87 +5,94 @@ class Set {
     vector<int> elems;
 
 public:
-    Set() {}
+    Set();
+    Set(const Set &s);
+    void insert(int x);
+    Set operator+(Set &s);
+    Set operator-(Set &s);
+    Set operator*(Set &s);
+    bool operator<(Set &s);
+    bool operator==(Set &s);
+    friend istream& operator>>(istream &in, Set &s);
+    friend ostream& operator<<(ostream &out, const Set &s);
+};
 
-    Set(const Set &s) {
-        elems = s.elems;
+Set::Set() {}
+Set::Set(const Set &s) { elems = s.elems; }
+
+void Set::insert(int x) {
+    if (find(elems.begin(), elems.end(), x) == elems.end()) {
+        elems.push_back(x);
     }
+}
 
-    void insert(int x) {
-        if (find(elems.begin(), elems.end(), x) == elems.end()) {
-            elems.push_back(x);
-        }
+Set Set::operator+(Set &s) {
+    Set r = *this;
+    for (int x : s.elems) {
+        r.insert(x);
     }
+    return r;
+}
 
-    Set operator+(const Set &s) {
-        Set r = *this;
-        for (int x : s.elems) {
+Set Set::operator-(Set &s) {
+    Set r;
+    for (int x : elems) {
+        if (find(s.elems.begin(), s.elems.end(), x) == s.elems.end()) {
             r.insert(x);
         }
-        return r;
     }
+    return r;
+}
 
-    Set operator-(const Set &s) {
-        Set r;
-        for (int x : elems) {
-            if (find(s.elems.begin(), s.elems.end(), x) == s.elems.end()) {
-                r.insert(x);
-            }
+Set Set::operator*(Set &s) {
+    Set r;
+    for (int x : elems) {
+        if (find(s.elems.begin(), s.elems.end(), x) != s.elems.end()) {
+            r.insert(x);
         }
-        return r;
     }
+    return r;
+}
 
-    Set operator*(const Set &s) {
-        Set r;
-        for (int x : elems) {
-            if (find(s.elems.begin(), s.elems.end(), x) != s.elems.end()) {
-                r.insert(x);
-            }
+bool Set::operator<(Set &s) {
+    for (int x : elems) {
+        if (find(s.elems.begin(), s.elems.end(), x) == s.elems.end()) {
+            return false;
         }
-        return r;
     }
+    return true;
+}
 
-    bool operator<(const Set &s) {
-        for (int x : elems) {
-            if (find(s.elems.begin(), s.elems.end(), x) == s.elems.end()) {
-                return false;
-            }
+bool Set::operator==(Set &s) {
+    return (elems.size() == s.elems.size() && *this < s);
+}
+
+istream& operator>>(istream &in, Set &s) {
+    int n;
+    in >> n;
+    for (int i = 0; i < n; i++) {
+        int x;
+        in >> x;
+        s.insert(x);
+    }
+    return in;
+}
+
+ostream& operator<<(ostream &out, const Set &s) {
+    out << "{";
+    for (size_t i = 0; i < s.elems.size(); i++) {
+        out << s.elems[i];
+        if (i < s.elems.size() - 1) {
+            out << ",";
         }
-        return true;
     }
-
-    bool operator==(const Set &s) {
-        return (elems.size() == s.elems.size() && *this < s);
-    }
-
-    friend istream& operator>>(istream &in, Set &s) {
-        int n;
-        in >> n;
-        for (int i = 0; i < n; i++) {
-            int x;
-            in >> x;
-            s.insert(x);
-        }
-        return in;
-    }
-
-    friend ostream& operator<<(ostream &out, const Set &s) {
-        out << "{";
-        for (size_t i = 0; i < s.elems.size(); i++) {
-            out << s.elems[i];
-            if (i < s.elems.size() - 1) {
-                out << ",";
-            }
-        }
-        out << "}";
-        return out;
-    }
-};
+    out << "}";
+    return out;
+}
 
 int main() {
     Set a, b;
     int choice;
-
     cout << "Enter size and elements of Set A: ";
     cin >> a;
     cout << "Enter size and elements of Set B: ";
@@ -94,7 +101,6 @@ int main() {
     do {
         cout << "\n1. Union\n2. Difference\n3. Intersection\n4. Subset(A<B)\n5. Equal\n0. Exit\nChoice: ";
         cin >> choice;
-
         switch(choice) {
             case 1: cout << (a + b) << "\n"; break;
             case 2: cout << (a - b) << "\n"; break;

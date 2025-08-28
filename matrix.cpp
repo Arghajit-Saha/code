@@ -12,13 +12,13 @@ public:
         a.assign(n, vector<int>(m, 0));
     }
 
-    Matrix(const Matrix &mat) {
+    Matrix(Matrix &mat) {   // copy constructor (no const)
         n = mat.n;
         m = mat.m;
         a = mat.a;
     }
 
-    Matrix operator+(const Matrix &mat) {
+    Matrix operator+(Matrix &mat) {
         Matrix r(n, m);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -28,7 +28,7 @@ public:
         return r;
     }
 
-    Matrix operator-(const Matrix &mat) {
+    Matrix operator-(Matrix &mat) {
         Matrix r(n, m);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
@@ -38,7 +38,7 @@ public:
         return r;
     }
 
-    Matrix operator*(const Matrix &mat) {
+    Matrix operator*(Matrix &mat) {
         Matrix r(n, mat.m);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < mat.m; j++) {
@@ -60,11 +60,11 @@ public:
         return r;
     }
 
-    bool operator==(const Matrix &mat) {
+    bool operator==(Matrix &mat) {
         return a == mat.a;
     }
 
-    Matrix& operator=(const Matrix &mat) {
+    Matrix& operator=(Matrix &mat) {
         n = mat.n;
         m = mat.m;
         a = mat.a;
@@ -80,7 +80,8 @@ public:
         return in;
     }
 
-    friend ostream& operator<<(ostream &out, const Matrix &mat) {
+    // FIXED: take Matrix by value so rvalues (like a+b) also work
+    friend ostream& operator<<(ostream &out, Matrix mat) {
         for (int i = 0; i < mat.n; i++) {
             for (int j = 0; j < mat.m; j++) {
                 out << mat.a[i][j] << " ";
@@ -112,7 +113,7 @@ int main() {
             case 2: cout << (a - b); break;
             case 3: cout << (a * b); break;
             case 4: cout << (!a); break;
-            case 5: cout << (a == b ? "Equal" : "Not Equal") << "\n"; break;
+            case 5: cout << (a == b ? "Equal\n" : "Not Equal\n"); break;
         }
     } while(choice != 0);
 }

@@ -8,22 +8,22 @@ class Fraction {
 public:
     Fraction(int n = 0, int d = 1);
 
-    Fraction operator+(const Fraction &f) const;
-    Fraction operator-(const Fraction &f) const;
-    Fraction operator*(const Fraction &f) const;
-    Fraction operator/(const Fraction &f) const;
+    Fraction operator+(Fraction &f);
+    Fraction operator-(Fraction &f);
+    Fraction operator*(Fraction &f);
+    Fraction operator/(Fraction &f);
 
-    bool operator==(const Fraction &f) const;
-    bool operator!=(const Fraction &f) const;
-    bool operator<(const Fraction &f) const;
-    bool operator>(const Fraction &f) const;
+    bool operator==(Fraction &f);
+    bool operator!=(Fraction &f);
+    bool operator<(Fraction &f);
+    bool operator>(Fraction &f);
 
-    Fraction& operator=(const Fraction &f);
-    int operator[](int i) const;
-    operator double() const;
+    Fraction& operator=(Fraction &f);
+    int operator[](int i);
+    operator double();
 
     void input();
-    void print() const;
+    void print();
 };
 
 // ---------------- Definitions ----------------
@@ -35,7 +35,7 @@ Fraction::Fraction(int n, int d) {
 }
 
 void Fraction::reduce() {
-    int g = gcd(num, den);
+    int g = __gcd(num, den);
     num /= g;
     den /= g;
     if (den < 0) {
@@ -44,50 +44,50 @@ void Fraction::reduce() {
     }
 }
 
-Fraction Fraction::operator+(const Fraction &f) const {
+Fraction Fraction::operator+(Fraction &f) {
     return Fraction(num * f.den + f.num * den, den * f.den);
 }
 
-Fraction Fraction::operator-(const Fraction &f) const {
+Fraction Fraction::operator-(Fraction &f) {
     return Fraction(num * f.den - f.num * den, den * f.den);
 }
 
-Fraction Fraction::operator*(const Fraction &f) const {
+Fraction Fraction::operator*(Fraction &f) {
     return Fraction(num * f.num, den * f.den);
 }
 
-Fraction Fraction::operator/(const Fraction &f) const {
+Fraction Fraction::operator/(Fraction &f) {
     return Fraction(num * f.den, den * f.num);
 }
 
-bool Fraction::operator==(const Fraction &f) const {
+bool Fraction::operator==(Fraction &f) {
     return (num == f.num && den == f.den);
 }
 
-bool Fraction::operator!=(const Fraction &f) const {
+bool Fraction::operator!=(Fraction &f) {
     return !(*this == f);
 }
 
-bool Fraction::operator<(const Fraction &f) const {
+bool Fraction::operator<(Fraction &f) {
     return (num * f.den < f.num * den);
 }
 
-bool Fraction::operator>(const Fraction &f) const {
+bool Fraction::operator>(Fraction &f) {
     return f < *this;
 }
 
-Fraction& Fraction::operator=(const Fraction &f) {
+Fraction& Fraction::operator=(Fraction &f) {
     num = f.num;
     den = f.den;
     return *this;
 }
 
-int Fraction::operator[](int i) const {
+int Fraction::operator[](int i) {
     if (i == 0) return num;
     else return den;
 }
 
-Fraction::operator double() const {
+Fraction::operator double() {
     return (double)num / den;
 }
 
@@ -96,7 +96,7 @@ void Fraction::input() {
     reduce();
 }
 
-void Fraction::print() const {
+void Fraction::print() {
     cout << num << "/" << den;
 }
 

@@ -5,67 +5,91 @@ class Complex {
     double real, imag;
 
 public:
-    Complex(double r = 0, double i = 0) {
-        real = r;
-        imag = i;
-    }
+    Complex(double r = 0, double i = 0);
 
-    Complex operator+(const Complex &c) {
-        return Complex(real + c.real, imag + c.imag);
-    }
+    Complex operator+(const Complex &c) const;
+    Complex operator-(const Complex &c) const;
+    Complex operator*(const Complex &c) const;
+    Complex operator/(const Complex &c) const;
+    Complex operator!() const;
 
-    Complex operator-(const Complex &c) {
-        return Complex(real - c.real, imag - c.imag);
-    }
+    bool operator==(const Complex &c) const;
+    bool operator!=(const Complex &c) const;
 
-    Complex operator*(const Complex &c) {
-        return Complex(real * c.real - imag * c.imag,
-                       real * c.imag + imag * c.real);
-    }
+    Complex& operator=(const Complex &c);
 
-    Complex operator/(const Complex &c) {
-        double d = c.real * c.real + c.imag * c.imag;
-        return Complex((real * c.real + imag * c.imag) / d,
-                       (imag * c.real - real * c.imag) / d);
-    }
+    double operator[](int i) const;
 
-    Complex operator!() {
-        return Complex(real, -imag);
-    }
+    friend istream& operator>>(istream &in, Complex &c);
+    friend ostream& operator<<(ostream &out, const Complex &c);
 
-    bool operator==(const Complex &c) {
-        return (real == c.real && imag == c.imag);
-    }
-
-    bool operator!=(const Complex &c) {
-        return !(*this == c);
-    }
-
-    Complex& operator=(const Complex &c) {
-        real = c.real;
-        imag = c.imag;
-        return *this;
-    }
-
-    double operator[](int i) {
-        if (i == 0) return real;
-        else return imag;
-    }
-
-    friend istream& operator>>(istream &in, Complex &c) {
-        in >> c.real >> c.imag;
-        return in;
-    }
-
-    friend ostream& operator<<(ostream &out, const Complex &c) {
-        out << c.real << "+" << c.imag << "i";
-        return out;
-    }
-
-    operator double() {
-        return sqrt(real * real + imag * imag);
-    }
+    operator double() const;
 };
+
+// ---------------- Definitions ----------------
+
+Complex::Complex(double r, double i) {
+    real = r;
+    imag = i;
+}
+
+Complex Complex::operator+(const Complex &c) const {
+    return Complex(real + c.real, imag + c.imag);
+}
+
+Complex Complex::operator-(const Complex &c) const {
+    return Complex(real - c.real, imag - c.imag);
+}
+
+Complex Complex::operator*(const Complex &c) const {
+    return Complex(real * c.real - imag * c.imag,
+                   real * c.imag + imag * c.real);
+}
+
+Complex Complex::operator/(const Complex &c) const {
+    double d = c.real * c.real + c.imag * c.imag;
+    return Complex((real * c.real + imag * c.imag) / d,
+                   (imag * c.real - real * c.imag) / d);
+}
+
+Complex Complex::operator!() const {
+    return Complex(real, -imag);
+}
+
+bool Complex::operator==(const Complex &c) const {
+    return (real == c.real && imag == c.imag);
+}
+
+bool Complex::operator!=(const Complex &c) const {
+    return !(*this == c);
+}
+
+Complex& Complex::operator=(const Complex &c) {
+    real = c.real;
+    imag = c.imag;
+    return *this;
+}
+
+double Complex::operator[](int i) const {
+    if (i == 0) return real;
+    else return imag;
+}
+
+istream& operator>>(istream &in, Complex &c) {
+    in >> c.real >> c.imag;
+    return in;
+}
+
+ostream& operator<<(ostream &out, const Complex &c) {
+    out << c.real << "+" << c.imag << "i";
+    return out;
+}
+
+Complex::operator double() const {
+    return sqrt(real * real + imag * imag);
+}
+
+// ---------------- Main ----------------
 
 int main() {
     Complex a, b;
